@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>demo</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link href=" " rel="stylesheet">
+        <style>
+            *{margin: 0;padding: 0;}
+            body{font:12px/1.5 'Microsoft Yahei';background:#EBEBED;}
+            .clearfix:after{content:'';display:block;clear:both;}
+            a{text-decoration: none;color:#888;}
+            .fl{float:left;}
+            .fr{float:right;}
+            #wrap{
+                width:982px;
+                margin:50px auto;
+                box-shadow:0 0 5px 2px #ccc;
+                position: relative;
+                overflow:hidden;
+
+
+            }
+            #wrap .box{
+                height:158px;
+
+                background: #fff;
+
+
+            }
+            #wrap .box ul li{
+                list-style: none;
+                position:absolute;
+                width:130px;
+                text-align:center;
+            }
+            #wrap .box ul li img{
+                display:block;
+            }
+
+            #wrap .box_foot{
+                text-align:center;
+                height:31px;
+                background:-webkit-gradient(linear, left bottom, left top, from(rgba(223,223,223,1)), color-stop(66%, rgba(242,242,242,1)), color-stop(90%, rgba(242,242,242,1)), color-stop(93%, rgba(230,230,230,1)), color-stop(96%, rgba(210,210,210,1)), to(rgba(140,140,140,1)));
+                border-bottom:1px solid #ebebeb;
+                position: relative;
+
+            }
+            #wrap .box_foot a{
+                display:inline-block;
+                font-size:12px;
+                color:#888;
+                padding:10px;
+                position: relative;
+
+            }
+            #wrap .box_foot a.show{
+                color:#333;
+            }
+            #wrap .box_foot span{
+                position: absolute;
+                top:-1px;
+                width:15px;
+                height:8px;
+                background: url('./images/caret_active.png');
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrap" class="page">
+            <div class="box clearfix">
+                    <ul class="content">
+                        <li><a href="javascript:void(0)">
+                            <img src="images/1.jpg" alt=""/>iPod shuffle</a>
+                        </li>
+                        <li><a href="javascript:void(0)"><img src="images/2.jpg" alt=""/>iPod nano</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/3.jpg" alt=""/>iPod classic</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/4.jpg" alt=""/>iPod touch</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/5.jpg" alt=""/>Apple TV</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/6.jpg" alt=""/>Accessories</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/7.jpg" alt=""/>Download iTunes 10</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/8.jpg" alt=""/>iTunes Gift Cards</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/9.jpg" alt=""/>Nike + iPod</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/10.jpg" alt=""/>(PRODUCT) RED</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/11.jpg" alt=""/>MobileMe</a></li>
+                        <li><a href="javascript:void(0)"><img src="images/12.jpg" alt=""/>In-Ear Headphones</a></li>
+                    </ul>
+            </div>
+            <div class="box_foot">
+                <span style="left: 424px;" class="caret"></span>
+                <a class="show" href="javascript:void(0)">Products</a>
+                <a href="javascript:void(0)">iTunes and more</a>
+            </div>
+        </div>
+    </body>
+    <script>
+        var oWrap = document.getElementById('wrap');
+        var aLi = oWrap.getElementsByTagName('li');
+        var oSpan = oWrap.querySelector('.box_foot span');
+        // console.log(oSpan);
+        var aA = oWrap.querySelectorAll('.box_foot a');
+        var max_width = oWrap.offsetWidth;
+
+        var num = 0;
+
+
+        var width = aLi[0].offsetWidth;
+        // console.log(width);
+        var init = (max_width - 6*width)/2;
+        // console.log(init,width);
+
+        //初始化样式
+        for(var i=0,len = aLi.length;i<len;i++){
+            // console.log(len);
+            if(i<len/2){
+                aLi[i].style.left = init + width*i + 'px';
+                // console.log(init + width*i)
+            }else{
+                aLi[i].style.left = max_width + 'px';
+            }
+        }
+
+        var arr = [];
+
+        for(var i=0;i<len/2;i++){
+            arr[i] = init + width*i;
+        }
+        // console.log(arr);
+
+        //做点击事件
+        for(var i = 0;i<aA.length;i++){
+            aA[i].index = i;
+            aA[i].onclick = function(){
+                aA[num].className='';
+                num = this.index;
+                aA[num].className='show';
+                animate(oSpan,'left',this.offsetLeft+this.offsetWidth/2 - oSpan.offsetWidth/2,oSpan);
+                if(this.index == 0){
+                    var index = len - 1 ;
+                    var timer = setInterval(function(){
+                        if(index <len/2 ){
+                            animate(aLi[index],'left',arr[index],aLi[index])
+                        }else{
+                            animate(aLi[index],'left',max_width,aLi[index]);
+                        }
+                        index--;
+                        if(index < 0){
+                            clearInterval(timer);
+                        }
+                    },1000/60);
+                }else{
+                    var index = 0;
+                    var timer = setInterval(function(){
+                        if(index < len/2){
+                            animate(aLi[index],'left',-width,aLi[index]);
+                        }else{
+                            animate(aLi[index],'left',arr[index-len/2],aLi[index]);
+                        }
+                        index++;
+                        if(index == len){
+                            clearInterval(timer);
+                        }
+                    },1000/60);
+                }
+            }
+        }
+
+
+
+        function animate(obj,attr,target,tar_obj){//定义函数来封装
+            //clearInterval(obj.timer);
+            obj.offset = obj.offsetLeft;//用来存储obj目标的left值
+            obj.speed = 0;
+
+            //设置定时器让oBox运动
+            //弹性运动
+            obj.timer = setInterval(function(){
+
+                obj.speed += (target - obj.offset)/40;
+                obj.speed*= 0.85;
+                obj.offset += obj.speed;
+
+
+                //清除定时器
+                if(Math.abs(obj.offset - target) < 1 && Math.abs(obj.speed) < 1){
+                    obj.offset = target;
+                    clearInterval(obj.timer );
+                }
+
+                 tar_obj.style[attr] = obj.offset + 'px';
+            },1000/60);
+        }
+
+    </script>
+</html>

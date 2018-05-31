@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>demo</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link href=" " rel="stylesheet">
+        <style>
+            body{
+                margin:0;
+                padding:0;
+            }
+            #box{
+                position:relative;
+                width:600px;
+                height:100px;
+                margin:auto;
+                padding:20px;
+                border:1px solid #ccc;
+            }
+            #box ul li{
+                position:absolute;
+                list-style:none;
+                width:150px;
+                line-height:40px;
+                text-align:center;
+            }
+            #box ul li.on{
+                left:20px;
+                height:40px;
+                box-shadow:inset 0px 0px 5px 5px #ccc;
+                border-radius:10px;
+            }
+            #box ul li a{
+                position:relative;
+                display:block;
+                width:150px;
+                height:40px;
+                text-decoration:none;
+                color:#000;
+                z-index:9;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="box">
+            <ul>
+                <li>
+                    <a href="javascript:void(0)">item1</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">item1</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">item1</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">item1</a>
+                </li>
+                <li class='on'></li>
+            </ul>
+        </div>
+    </body>
+    <script>
+        var aLi = document.getElementsByTagName('li');
+        //animate(oBox,'left',500,oBox);
+        //定位
+        var oBox = document.getElementById('box');
+        var width = aLi[0].offsetWidth;
+        var num = 0;
+
+        for(var i=0,len = aLi.length;i<len - 1;i++){
+            var dom = aLi[i];
+            dom.index = i;
+            dom.style.left = 20 + width * i + 'px';
+            dom.onclick = function(){
+                num = this.index;
+                animate(aLi[len-1],'left',20 + width * num ,aLi[len-1]);
+                //这里面是aLi最后一个，先获取到这个li的位置，然后写出目标在哪儿，然后它再过去，才对
+            }
+        }
+
+
+        function animate(obj,attr,target,tar_obj){//定义函数来封装
+            clearInterval(obj.timer);
+            obj.offset = obj.offsetLeft;//用来存储obj目标的left值
+            obj.speed = 0;
+
+            //设置定时器让oBox运动
+            //弹性运动
+            obj.timer = setInterval(function(){
+
+                obj.speed += (target - obj.offset)/40;
+                obj.speed*= 0.9;
+                obj.offset += obj.speed;
+
+
+                //清除定时器
+                if(Math.abs(obj.offset - target) < 1 && Math.abs(obj.speed) < 1){
+                    obj.offset = target;
+                    clearInterval(obj.timer );
+                }
+
+                 tar_obj.style[attr] = obj.offset + 'px';
+            },1000/60);
+        }
+
+    </script>
+</html>

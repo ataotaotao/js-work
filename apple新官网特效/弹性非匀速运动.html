@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>demo</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link href=" " rel="stylesheet">
+        <style>
+            body{
+                margin:0;
+                padding:0;
+            }
+            #box{
+                position:absolute;
+                width:100px;
+                height:100px;
+                background-color:green;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="box"></div>
+    </body>
+    <script>
+        var oBox = document.getElementById('box');
+        var speed = 0;
+        var timer;
+        var target = 500;
+
+        //设置定时器让oBox运动
+        //弹性运动
+        timer = setInterval(function(){
+            var offset = oBox.offsetLeft;
+            //在offset小于target的时候让其加速，
+            // if(offset < target){
+            //     speed += (target - offset)/80;
+            // //在offset大于target的时候让其减速
+            // }else{
+            //     speed -= (offset - target)/80;
+            // }
+
+            //更正:两个可以合为一体
+            speed += (target - offset)/80;
+            offset +=speed;
+
+            oBox.style.left = offset + 'px';
+        },1000/60);
+    </script>
+</html>

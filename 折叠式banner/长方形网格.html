@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>demo</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link href=" " rel="stylesheet">
+        <style>
+            body,ul{
+                margin:0;
+                padding:0;
+            }
+            ul{
+                list-style:none;
+                margin:100px auto;
+            }
+            ul li{
+                float:left;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+
+
+        </ul>
+    </body>
+    <script src='js/jQuery.js'></script>
+    <script>
+        var $ul = $('ul');
+        var x_num = 20;//水平10个
+        var y_num = 10;//竖直10个
+        var h = 50;
+        var w = 50;//宽高均为50
+        var num = x_num*y_num;
+        var y=0;//竖直数值
+        var x=0;//水平数值
+
+        var x_max = x_num - 1;//最大最小值
+        var y_max = y_num - 1;
+        var min = 0;
+
+        $ul.css({
+            width:x_num*(h+1),//加1是因为绘制的li有边框
+            height:y_num*(w+1),
+            'border-left':'1px solid #ccc',
+            'border-top':'1px solid #ccc'
+        });
+
+        //创建li
+        var frag = document.createDocumentFragment();//创建文档碎片，节省性能
+        for(var i=0;i<num;i++){
+            var li = $('<li/>');
+            li.css({
+                width:w,
+                height:h,
+                'border-right':'1px solid #ccc',
+                'border-bottom':'1px solid #ccc'
+            });
+            $(frag).append(li);
+        }
+        $ul.append(frag);//只渲染页面一次
+
+        //数值变化
+        var timer;
+        var index = 0;
+        timer = setInterval(function(){
+            $ul.children().eq(y*x_num+x).html(index);
+            if(y === min && x < x_max){//右上角
+                x++;
+            }else if(x === x_max && y < y_max){//左上角
+                y++;
+            }else if( y === y_max && x > min){//右下角
+                x--;
+            }else{//左下角
+                y--;
+            }
+
+            if( y == min +1 && x === min){
+                min++;
+                x_max--;
+                y_max--;
+            }
+
+
+            index++;
+            console.log('ok');
+            //清除定时器
+            if(index == num){
+                clearInterval(timer);
+            }
+        },1000/60);
+    </script>
+</html>
